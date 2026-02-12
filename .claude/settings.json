@@ -1,5 +1,36 @@
 {
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path' | { read f; [[ \"$f\" == *.py ]] && /home/wyim/micromamba/bin/black \"$f\" 2>/dev/null; exit 0; }"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path' | { read f; [[ \"$f\" == *.py ]] && /home/wyim/micromamba/bin/pytest --tb=short -q 2>&1 | tail -20; exit 0; }"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path' | { read f; [[ \"$f\" == *.md ]] && /home/wyim/.local/node_modules/.bin/markdownlint \"$f\" 2>/dev/null; exit 0; }"
+          }
+        ]
+      }
+    ]
   }
 }
