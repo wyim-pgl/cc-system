@@ -1,0 +1,21 @@
+# Claude Code - Ignore ephemeral/session data
+
+# Session logs (large, per-session)
+.claude/projects/**/*.jsonl
+.claude/projects/**/subagents/
+.claude/projects/**/tool-results/
+.claude/projects/**/sessions-index.json
+
+# Statsig telemetry
+.claude/statsig/
+
+# Pycache
+__pycache__/
+*.pyc
+
+# Keep these (tracked):
+# .claude/settings.json
+# .claude/agents/
+# .claude/skills/
+# .claude/hooks/
+# .claude/projects/*/memory/  (MEMORY.md files)

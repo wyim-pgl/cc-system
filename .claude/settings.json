@@ -2,6 +2,7 @@
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
+  "model": "opus",
   "hooks": {
     "PostToolUse": [
       {
@@ -30,7 +31,28 @@
             "command": "jq -r '.tool_input.file_path' | { read f; [[ \"$f\" == *.md ]] && /home/wyim/.local/node_modules/.bin/markdownlint \"$f\" 2>/dev/null; exit 0; }"
           }
         ]
+      },
+      {
+        "matcher": "Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /data/gpfs/home/wyim/.claude/hooks/agent_tmux_hook.sh"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /data/gpfs/home/wyim/.claude/hooks/agent_notify_hook.sh"
+          }
+        ]
       }
     ]
-  }
+  },
+  "skipDangerousModePermissionPrompt": true
 }
