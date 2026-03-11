@@ -34,10 +34,20 @@ while true; do
 
     if [ -d "$STATUS_DIR" ] && ls "$STATUS_DIR"/*.status &>/dev/null; then
         # Collect agents
-        for f in "$STATUS_DIR"/*.status; do
+		for f in "$STATUS_DIR"/*.status; do
             TOTAL=$((TOTAL + 1))
-            source "$f"
-
+            # Safe parsing instead of source (avoids command execution from unquoted values)
+            name=""; id=""; description=""; status=""; updated=""
+            while IFS='=' read -r key val; do
+                val="${val%\"}" ; val="${val#\"}"  # strip surrounding quotes if present
+                case "$key" in
+                    name) name="$val" ;;
+                    id) id="$val" ;;
+                    description) description="$val" ;;
+                    status) status="$val" ;;
+                    updated) updated="$val" ;;
+                esac
+            done < <(grep -v '^#' "$f")
             SPINNER=""
             STATUS_COLOR="$C_YELLOW"
             STATUS_ICON="..."
